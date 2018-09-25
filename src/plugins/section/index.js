@@ -2,6 +2,8 @@ import React from 'react'
 import './style.css'
 
 import Controls from './Controls'
+import Notes from '../notes'
+import { getEventRange } from 'slate-react'
 
 export default function Section(options) {
   return {
@@ -27,6 +29,8 @@ const RenderSectionNode = {
   renderNode({ attributes, editor, children, node, isFocused }) {
     if (node.type === 'section') {
       const isVisible = node.data.get('isVisible')
+      const hasNotes = node.nodes.some(child => child.type === 'notes')
+
       return (
         <section
           className={`section content ${!isVisible ? 'hidden' : ''}`}
@@ -35,6 +39,24 @@ const RenderSectionNode = {
           {children}
           {isFocused ? (
             <Controls editor={editor} isVisible={isVisible} />
+          ) : null}
+          {!hasNotes ? (
+            <aside
+              className="notes placeholder"
+              onMouseDown={e => {
+                const change = editor.value.change()
+                const onChange = editor.props.onChange
+                onChange(
+                  change
+                    .moveToEndOfNode(node)
+                    .call(Notes().changes.insertNotes)
+                    .focus()
+                )
+                return true
+              }}
+            >
+              Klick me
+            </aside>
           ) : null}
         </section>
       )
@@ -45,7 +67,6 @@ const RenderSectionNode = {
 const RenderPNode = {
   renderNode({ attributes, children, node }) {
     if (node.type === 'p') {
-      console.log('Ah')
       return <p {...attributes}>{children}</p>
     }
   }

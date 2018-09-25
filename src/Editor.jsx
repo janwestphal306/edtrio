@@ -14,6 +14,7 @@ import Title from './plugins/title'
 import Section from './plugins/section'
 import Iframe from './plugins/iframe'
 import DownloadFile from './plugins/download-file'
+import Notes from './plugins/notes'
 
 import DocumentViewer from './dev-document-viewer/DocumentViewer'
 import AddSection from './plugins/add-section'
@@ -32,6 +33,7 @@ class Editor extends Component {
     this.plugins = [
       ...Title().plugins,
       ...Section().plugins,
+      ...Notes().plugins,
       ...TextMenu().plugins,
       ...MarkdownShortcuts().plugins,
       ...Iframe().plugins,
