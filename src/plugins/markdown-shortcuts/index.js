@@ -13,6 +13,8 @@ export default function MarkdownShortcuts(options) {
 
 const HandleKeyDown = {
   onKeyDown(event, change) {
+    if (change.value.anchorBlock.type !== 'p') return
+
     switch (event.key) {
       case ' ':
         return onSpace(event, change)

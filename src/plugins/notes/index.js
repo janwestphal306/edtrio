@@ -12,7 +12,7 @@ export default function Notes(options) {
     components: {
       NotesNode
     },
-    plugins: [RenderNotesNode]
+    plugins: [RenderNotesNode, DealWithEnter]
   }
 }
 
@@ -42,5 +42,16 @@ const RenderNotesNode = {
     if (node.type === 'notes') {
       return <NotesNode {...attributes}>{children}</NotesNode>
     }
+  }
+}
+
+const DealWithEnter = {
+  onKeyDown(event, change) {
+    if (event.key !== 'Enter') return
+    if (change.value.anchorBlock.type !== 'notes') return
+    console.log('Still standing!')
+    change.insertText('\n')
+    return true
+    //TODO: gotta return true I guess
   }
 }
