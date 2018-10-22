@@ -16,6 +16,7 @@ import Title from './plugins/title'
 import Section from './plugins/section'
 import Iframe from './plugins/iframe'
 import DownloadFile from './plugins/download-file'
+import Embed from './plugins/embed'
 
 import DocumentViewer from './dev-document-viewer/DocumentViewer'
 import AddSection from './plugins/add-section'
@@ -44,7 +45,8 @@ class Editor extends Component {
       ...URLHandler().plugins,
       ...CodeBlockPlugin().plugins,
       ...Image().plugins,
-      ...Geogebra().plugins
+      ...Geogebra().plugins,
+      ...Embed().plugins
       // ...AutoURL().plugins
     ]
 

@@ -1,5 +1,5 @@
 import Image from '../image'
-import Iframe from '../iframe'
+import Embed from '../embed'
 import { Text, Block } from 'slate'
 
 /**
@@ -49,13 +49,11 @@ export const onClickCodeButton = (event, change, onChange) => {
 }
 
 export const onClickIframeButton = (event, change, onChange) => {
-  const { insertIframe } = Iframe().changes
+  const { insertEmbedNode } = Embed().changes
 
   event.preventDefault()
-  const src = window.prompt('Enter the URL of the iframe:')
-  if (!src) return
 
-  change.call(insertIframe, src)
+  change.call(insertEmbedNode, null)
 
   onChange(change)
 }
