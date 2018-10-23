@@ -49,11 +49,14 @@ export const onClickCodeButton = (event, change, onChange) => {
 }
 
 export const onClickIframeButton = (event, change, onChange) => {
-  const { insertEmbedNode } = Embed().changes
-
   event.preventDefault()
 
-  change.call(insertEmbedNode, null)
+  change.insertBlock(
+    Block.create({
+      type: 'embed',
+      nodes: [Text.create('HEY')]
+    })
+  )
 
   onChange(change)
 }
