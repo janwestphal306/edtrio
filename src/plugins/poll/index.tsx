@@ -1,9 +1,10 @@
+import Button from "@material-ui/core/Button";
+import ListEle from "@material-ui/core/List";
+import AddIcon from "@material-ui/icons/Add";
+import SendIcon from "@material-ui/icons/Send";
 import { List } from "immutable";
-import "materialize-css/dist/css/materialize.min.css";
-import "materialize-css/dist/js/materialize.min.js";
 import React, { Fragment } from "react";
-import { Editor, Node } from "slate";
-import { Block, Text } from "slate";
+import { Block, Editor, Node, Text } from "slate";
 import styled from "styled-components";
 import PollAnswerNode from "./Answer";
 import PollQuestionNode from "./Question";
@@ -40,21 +41,23 @@ const appendNewAnswer = (editor: Editor, node: any) => {
 
 const answerButton = (editor: Editor, node: any, readOnly: boolean) => {
   return readOnly ? (
-    <button
-      className="btn-flat"
+    <Button
+      style={{ float: "right" }}
+      variant="outlined"
       onClick={event => onClickNewAnswerButton(event, editor, node)}
     >
-      <i className="material-icons left">send</i>
-      Antworten
-    </button>
+      <SendIcon />
+      &nbsp;Antwort senden
+    </Button>
   ) : (
-    <button
-      className="btn-flat"
+    <Button
+      style={{ float: "right" }}
+      variant="outlined"
       onClick={event => onClickNewAnswerButton(event, editor, node)}
     >
-      <i className="material-icons left">add</i>
-      Antwort hinzufügen
-    </button>
+      <AddIcon />
+      &nbsp;Antwort hinzufügen
+    </Button>
   );
 };
 
@@ -63,9 +66,7 @@ function PollNode(props: any) {
 
   return (
     <div>
-      <ul className="collection with-header" {...attributes}>
-        {children}
-      </ul>
+      <ListEle {...attributes}>{children}</ListEle>
       <div className="right-align">{answerButton(editor, node, readOnly)}</div>
     </div>
   );
@@ -109,7 +110,12 @@ const RenderPollNode = {
     }
     if (node.type === "poll_question") {
       return (
-        <PollQuestionNode parent={parent} editor={editor} {...attributes}>
+        <PollQuestionNode
+          parent={parent}
+          editor={editor}
+          readOnly={readOnly}
+          {...attributes}
+        >
           {children}
         </PollQuestionNode>
       );
