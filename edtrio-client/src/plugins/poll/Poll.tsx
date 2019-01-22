@@ -8,7 +8,10 @@ import { List } from "immutable";
 import React from "react";
 import { Block, Editor, Node, Text } from "slate";
 import { PollStateContext } from "../../context/PollStateContext";
-import { testPollNodeValidity } from "./helpers/validity";
+import {
+  checkAndDeletePollNode,
+  testPollNodeValidity,
+} from "./helpers/validity";
 import TemplatePicker from "./TemplatePicker";
 import PollTogglesEditMode from "./toggles/PollTogglesEditMode";
 import PollTogglesReadOnlyMode from "./toggles/PollTogglesReadOnlyMode";
@@ -66,6 +69,10 @@ export default class PollNode extends React.Component<{
         )}
       </PollStateContext.Consumer>
     );
+  }
+
+  public componentWillUnmount() {
+    checkAndDeletePollNode(this.props.editor, this.props.node);
   }
 
   private mainActionButton(

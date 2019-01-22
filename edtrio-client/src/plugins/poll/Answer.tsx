@@ -9,7 +9,10 @@ import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
 import React from "react";
 import { Block, Editor } from "slate";
 import { PollStateContext } from "../../context/PollStateContext";
-import { testPollAnswerNodeValidity } from "./helpers/validity";
+import {
+  checkAndDeletePollAnswerNode,
+  testPollAnswerNodeValidity,
+} from "./helpers/validity";
 
 // TODO: add delete function
 
@@ -50,6 +53,10 @@ export default class PollAnswerNode extends React.Component<{
     } else {
       return this.renderEditMode(children, node, editor, attributes);
     }
+  }
+
+  public componentWillUnmount() {
+    checkAndDeletePollAnswerNode(this.props.editor, this.props.node);
   }
 
   private renderReadOnlyMode(
