@@ -78,7 +78,7 @@ export default class PollNode extends React.Component<{
       ? currentUser.isTeacher
         ? this.controlToggles()
         : this.sendAnswerButton(votingAllowed)
-      : this.addAnswerButton(editor, node);
+      : this.addEditToolbar(editor, node);
   }
 
   private addEditToolbar(editor: Editor, node: any) {

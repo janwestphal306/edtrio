@@ -102,7 +102,6 @@ export async function testPollAnswerNodeValidity(
       mutation: CREATE_POLL_ANSWER,
       variables: { pollId: "cjr6l0fiv004i0775e7bfcu7a" },
     });
-    console.log(pollAnswer);
     if (pollAnswer && pollAnswer.data && pollAnswer.data.createPollAnswer) {
       editor.setNodeByKey(currentNode.key, {
         data: { id: pollAnswer.data.createPollAnswer.id },

@@ -18,15 +18,15 @@ type Mutation {
     userIds: [String!]!
   ): Document
   createPoll(votingAllowed: Boolean!, displayResults: Boolean!): Poll
-  deletePoll(pollId): None
+  deletePoll(pollId: String!): Poll
   updatePoll(
     pollId: String!
     votingAllowed: Boolean
     displayResults: Boolean
   ): Poll
   createPollAnswer(pollId: String!): PollAnswer
-  deletePollAnswer(pollAnswerId:string!): None
-  addUserToPollAnswer(pollAnswerId: String!, userId: String!): PollAnswer
+  deletePollAnswer(pollAnswerId: String!): PollAnswer
+  addSubmissionToPollAnswer(pollAnswerId: String!, userId: String!): PollAnswer
 }
 
 type Subscription {

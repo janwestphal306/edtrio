@@ -1,154 +1,12 @@
 import { GraphQLServer, PubSub } from "graphql-yoga";
 
 import { prisma, Prisma } from "./database/generated/prisma-client/index.js";
+import { resolvers } from "./server";
 
-interface ContextType {
+export interface IContextType {
   prisma: Prisma;
   valueChangedPubSub: PubSub;
 }
-
-const resolvers = {
-  Query: {
-    documents(root: any, args: {}, context: ContextType) {
-      return context.prisma.documents({});
-    },
-    user(root: any, args: any, context: ContextType) {
-      return context.prisma.user({ id: args.userId });
-    },
-    document(root: any, args: any, context: ContextType) {
-      return context.prisma.document({ id: args.documentId });
-    },
-    users(root: any, args: any, context: ContextType) {
-      return context.prisma.users();
-    },
-    poll(root: any, args: any, context: ContextType) {
-      return context.prisma.poll({ id: args.pollId });
-    },
-    pollAnswer(root: any, args: any, context: ContextType) {
-      return context.prisma.pollAnswer({ id: args.pollAnswerId });
-    },
-  },
-  Mutation: {
-    createUser(root: any, args: any, context: ContextType) {
-      return context.prisma.createUser({
-        name: args.name,
-        isTeacher: args.isTeacher,
-      });
-    },
-    createDocument(root: any, args: any, context: ContextType) {
-      return context.prisma.createDocument({
-        value: args.value,
-        users: {
-          connect: args.userIds.map((id: string) => {
-            return { id };
-          }),
-        },
-      });
-    },
-    updateDocument(root: any, args: any, context: ContextType) {
-      context.valueChangedPubSub.publish("VALUE_CHANGED" + args.documentId, {
-        valueChanged: args,
-      });
-      return context.prisma.updateDocument({
-        where: { id: args.documentId },
-        data: {
-          users: {
-            connect: args.userIds.map((id: string) => {
-              return { id };
-            }),
-          },
-          value: args.value,
-        },
-      });
-    },
-    createPoll(root: any, args: any, context: ContextType) {
-      return context.prisma.createPoll({
-        votingAllowed: args.votingAllowed,
-        displayResults: args.displayResults,
-      });
-    },
-    deletePoll(root: any, args: any, context: ContextType) {
-      context.prisma.deleteManyPollAnswers({ poll: args.pollId });
-      return context.prisma.deletePoll({ id: args.pollId });
-    },
-    updatePoll(root: any, args: any, context: ContextType) {
-      return context.prisma.updatePoll({
-        where: { id: args.pollId },
-        data: {
-          votingAllowed: args.votingAllowed,
-          displayResults: args.displayResults,
-        },
-      });
-    },
-    async createPollAnswer(root: any, args: any, context: ContextType) {
-      const newAnswer = await context.prisma.createPollAnswer({
-        poll: {
-          connect: args.pollId,
-        },
-      });
-      const pollAnswers = await context.prisma
-        .poll({ id: args.pollId })
-        .answers();
-      pollAnswers.push(newAnswer);
-
-      return context.prisma.updatePoll({
-        where: { id: args.pollId },
-        data: {
-          answers: {
-            connect: pollAnswers.map(answer => ({ id: answer.id })),
-          },
-        },
-      });
-    },
-    deletePollAnswer(root: any, args: any, context: ContextType) {
-      return context.prisma.deletePoll({ id: args.pollAnswerId });
-    },
-    async addUserToPollAnswer(root: any, args: any, context: ContextType) {
-      const users = await context.prisma
-        .pollAnswer({ id: args.pollAnswerId })
-        .votes();
-      const userIds = users.map(user => ({ id: user.id }));
-      userIds.push({ id: args.userId });
-
-      context.valueChangedPubSub.publish(`POLL_CHANGED_${args.pollId}`, {
-        valueChanged: args,
-      });
-
-      return context.prisma.updatePollAnswer({
-        where: { id: args.pollAnswerId },
-        data: {
-          votes: {
-            connect: userIds,
-          },
-        },
-      });
-    },
-  },
-  Subscription: {
-    valueChanged: {
-      subscribe: (parent: any, args: any, context: ContextType, info: any) => {
-        const channel = "VALUE_CHANGED" + args.documentId;
-        return context.valueChangedPubSub.asyncIterator(channel);
-      },
-    },
-    pollChanged: {
-      subscribe: (parent: any, args: any, context: ContextType, info: any) => {
-        const channel = `POLL_CHANGED_${args.pollId}`;
-        return context.valueChangedPubSub.asyncIterator(channel);
-      },
-    },
-  },
-
-  Document: {
-    users(root: { id: string }, args: {}, context: ContextType) {
-      return context.prisma
-        .document({
-          id: root.id,
-        })
-        .users();
-    },
-  },
-};
 
 const valueChangedPubSub = new PubSub();
 
@@ -160,4 +18,5 @@ const server = new GraphQLServer({
     valueChangedPubSub,
   },
 });
+
 server.start(() => console.log(`Server is running on http://localhost:4000`));
