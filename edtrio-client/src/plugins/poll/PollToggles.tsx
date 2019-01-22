@@ -38,7 +38,7 @@ abstract class PollToggles extends React.Component {
                   classes={{ label: "pollToggleLabel" }}
                   control={
                     <Checkbox
-                      checked={!votingAllowed}
+                      checked={votingAllowed}
                       icon={<VoteForbiddenIcon fontSize={iconSize} />}
                       checkedIcon={<VoteAllowedIcon fontSize={iconSize} />}
                       onChange={() => updateVotingAllowed(!votingAllowed)}
@@ -110,7 +110,7 @@ export class PollTogglesEditMode extends PollToggles {
     }
   }
   protected getVoteLabel(votingAllowed: boolean) {
-    if (votingAllowed) {
+    if (!votingAllowed) {
       return "Abstimmen manuell freischlaten";
     } else {
       return "Abstimmen sofort freischlaten";

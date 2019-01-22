@@ -43,13 +43,23 @@ export const CREATE_POLL = gql`
 
 export const DELETE_POLL = gql`
   mutation deletePoll($pollId: String!) {
-    deletePoll(pollId: $pollId) { }
+    deletePoll(pollId: $pollId) {
+      id
+    }
   }
 `;
 
 export const UPDATE_POLL = gql`
-  mutation updatePoll($pollId: String!, votingAllowed: Boolean, displayResults: Boolean) {
-    updatePoll(pollId: $pollId, votingAllowed: $votingAllowed, displayResults: $displayResults) {
+  mutation updatePoll(
+    $pollId: String!
+    $votingAllowed: Boolean
+    $displayResults: Boolean
+  ) {
+    updatePoll(
+      pollId: $pollId
+      votingAllowed: $votingAllowed
+      displayResults: $displayResults
+    ) {
       votingALlowed
       displayResults
     }
@@ -66,13 +76,17 @@ export const CREATE_POLL_ANSWER = gql`
 
 export const DELETE_POLL_ANSWER = gql`
   mutation deletePollAnswer($pollAnswerId: String!) {
-    deletePollAnswer(pollAnswerId: $pollAnswerId) { }
+    deletePollAnswer(pollAnswerId: $pollAnswerId) {
+      id
+    }
   }
 `;
 
-export const ADD_USER_TO_POLL_ANSWER = gql`
-  mutation addSubmissionToPollAnswer($pollAnswerId: String!, userId: String!) {
-    addSubmissionToPollAnswer(pollAnswerId: $pollAnswerId, userId: $userId) { }
+export const ADD_SUBMISSION_TO_POLL_ANSWER = gql`
+  mutation addSubmissionToPollAnswer($pollAnswerId: String!, $userId: String!) {
+    addSubmissionToPollAnswer(pollAnswerId: $pollAnswerId, userId: $userId) {
+      id
+    }
   }
 `;
 
