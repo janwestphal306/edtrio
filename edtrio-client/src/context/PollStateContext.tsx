@@ -24,12 +24,7 @@ export const PollStateContext = createContext<IPollStateProviderState>({
   updateSelectedAnswer: (selectedAnswer: any) => {},
 });
 
-interface IPollStateProviderProps {}
-
-export class PollStateProvider extends Component<
-  IPollStateProviderProps,
-  IPollStateProviderState
-> {
+export class PollStateProvider extends Component<{}, IPollStateProviderState> {
   constructor(props: any) {
     super(props);
 

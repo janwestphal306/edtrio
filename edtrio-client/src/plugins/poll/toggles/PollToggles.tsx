@@ -13,10 +13,10 @@ import InvisibleIcon from "@material-ui/icons/VisibilityOffOutlined";
 
 import React from "react";
 import { Block, Editor, Node, Text } from "slate";
-import { PollStateContext } from "../../context/PollStateContext";
+import { PollStateContext } from "../../../context/PollStateContext";
 const iconSize = "default";
 
-abstract class PollToggles extends React.Component {
+export default abstract class PollToggles extends React.Component {
   public render() {
     return (
       <PollStateContext.Consumer>
@@ -82,38 +82,4 @@ abstract class PollToggles extends React.Component {
 
   protected abstract getResultsLabel(displayResults: boolean);
   protected abstract getVoteLabel(votingAllowed: boolean);
-}
-
-export class PollTogglesReadOnlyMode extends PollToggles {
-  protected getResultsLabel(displayResults: boolean) {
-    if (displayResults) {
-      return "Ergebnisse freigeschaltet";
-    } else {
-      return "Ergebnisse nicht sichtbar";
-    }
-  }
-  protected getVoteLabel(votingAllowed: boolean) {
-    if (votingAllowed) {
-      return "Nutzer dürfen nicht abstimmen";
-    } else {
-      return "Nutzer dürfen abstimmen";
-    }
-  }
-}
-
-export class PollTogglesEditMode extends PollToggles {
-  protected getResultsLabel(displayResults: boolean) {
-    if (displayResults) {
-      return "Ergebnisse sofort anzeigen";
-    } else {
-      return "Ergebnisse manuell anzeigen";
-    }
-  }
-  protected getVoteLabel(votingAllowed: boolean) {
-    if (!votingAllowed) {
-      return "Abstimmen manuell freischlaten";
-    } else {
-      return "Abstimmen sofort freischlaten";
-    }
-  }
 }

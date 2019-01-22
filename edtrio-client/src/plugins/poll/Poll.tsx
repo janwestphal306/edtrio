@@ -9,8 +9,9 @@ import React from "react";
 import { Block, Editor, Node, Text } from "slate";
 import { PollStateContext } from "../../context/PollStateContext";
 import { testPollNodeValidity } from "./helpers/validity";
-import { PollTogglesEditMode, PollTogglesReadOnlyMode } from "./PollToggles";
 import TemplatePicker from "./TemplatePicker";
+import PollTogglesEditMode from "./toggles/PollTogglesEditMode";
+import PollTogglesReadOnlyMode from "./toggles/PollTogglesReadOnlyMode";
 
 export function createNewPollAnswer() {
   return Block.create({
